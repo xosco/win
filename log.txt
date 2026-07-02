@@ -9,6 +9,8 @@ net user *** /active:yes
 2 restore:
 copy c:\utilman.exe c:\windows\system32\utilman.exe
 
+sfc /scanfile=c:\windows\system32\utilman.exe
+
 net user *** /active:no
 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations /t REG_MULTI_SZ /d "\??\C:\utilman.exe\0\??\C:\Windows\System32\utilman.exe\0\0" /f
