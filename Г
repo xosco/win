@@ -1,0 +1,35 @@
+-- Скрипт для поиска локальной метки "Destination"
+local player = game:GetService("Players").LocalPlayer
+local character = player.Character
+
+print("--- НАЧАЛО ПОИСКА МЕТКИ ---")
+
+-- Функция для проверки каждого объекта в игре
+local function checkObject(obj)
+    -- 1. Проверяем текстовые элементы (BillboardGui, TextLabel)
+    if obj:IsA("TextLabel") or obj:IsA("TextBox") then
+        if string.find(string.lower(obj.Text), "destination") or string.find(string.lower(obj.Text), "достав") then
+            print("[НАЙДЕНО] Текст: '" .. obj.Text .. "' внутри класса: " .. obj.ClassName)
+            print("Полный путь в Explorer: " .. obj:GetFullName())
+            
+            -- Пытаемся найти родительскую деталь, чтобы узнать координаты
+            local parentPart = obj:FindFirstAncestorOfClass("Part") or obj:FindFirstAncestorOfClass("MeshPart")
+            if parentPart then
+                print("-> Координаты (Position):", parentPart.Position)
+            end
+        end
+    end
+    
+    -- 2. Проверяем зеленый цилиндр (по цвету или типу Adornment/Highlight)
+    if obj:IsA("CylinderHandleAdornment") or obj:IsA("SelectionBox") or obj:IsA("Highlight") or obj:IsA("Beam") then
+        print("[НАЙДЕНО] Визуальный эффект: " .. obj.ClassName)
+        print("Полный путь в Explorer: " .. obj:GetFullName())
+    end
+end
+
+-- Запускаем сканирование ключевых мест, где может быть метка
+for _, v in ipairs(game:GetDescendants()) do
+    checkObject(v)
+end
+
+print("--- ПОИСК ЗАВЕРШЕН ---")
